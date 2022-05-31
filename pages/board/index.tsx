@@ -2,14 +2,31 @@ import AddPost from "@/components/board/AddPost";
 import Article from "@/components/board/Article";
 import { IArticle } from "@/types";
 import { InferGetStaticPropsType } from "next";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function BoardPage({articles}: InferGetStaticPropsType<typeof getStaticProps>) { // 자바에서 컨트롤러 역할
     const [articleList, setArticleList] = useState(articles)
+    const addPost = async (e:React.FormEvent, formData: IArticle) => {
+        e.preventDefault()
+        const article: IArticle = {
+            artId: Math.random(),
+            title: formData.title,
+            content: formData.content
+        }
+        setArticleList([article, ...articleList])
+    }
+
+    const deletePost = async (artId: number) => {
+        const arr: IArticle[] = articles.filter((article: IArticle) => (article.artId !== artId))
+        setArticleList(arr)
+    }
+
+    if(!articleList) return <h1>Loading...</h1>
+
     return <>
-        <AddPost/>
+        <AddPost write={addPost}/>
         {articleList.map((article: IArticle) => (
-            <Article key={article.artId} article={article}/>
+            <Article key={article.artId} article={article} deletePost={deletePost} />
         ))}
     </>
 }

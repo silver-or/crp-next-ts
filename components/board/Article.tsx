@@ -3,12 +3,17 @@ import React from "react"
 
 type Props = {
     article: IArticle
+    deletePost: (id: number) => void // 함수형 객체
 }
 
-const Article: React.FC<Props> = ({article}) => {
+const Article: React.FC<Props> = ({article, deletePost}) => {
     return (
         <>
-            <h1>Article</h1>
+            <h1>게시글</h1>
+            <h1>글 번호 : {article.artId}</h1>
+            <h1>제목 : {article.title}</h1>
+            <h1>내용 : {article.content}</h1>
+            <button onClick={() => deletePost(article.artId)}>삭제</button>
         </>
     )
 }
